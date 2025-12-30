@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 
@@ -31,9 +31,11 @@ class EventBase(BaseModel):
     description: Optional[str] = None
 
 
-class EventCreate(EventBase):
-    pass
-
+class EventCreate(BaseModel):
+    title: str
+    location: str
+    description: str
+    date: datetime = Field(default_factory=datetime.utcnow)
 
 class Event(EventBase):
     id: int

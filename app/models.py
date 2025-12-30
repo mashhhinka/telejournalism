@@ -22,8 +22,8 @@ class Event(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    location = Column(String)          # <- make sure this exists
-    description = Column(String)
+    location = Column(String, nullable=False)
+    description = Column(String, nullable=False)
     date = Column(DateTime, default=datetime.utcnow)
 
     reports = relationship("Report", back_populates="event")
