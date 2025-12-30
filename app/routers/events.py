@@ -1,12 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db  # your DB session dependency
 from app import models, schemas
-
+from fastapi import Depends
 
 router = APIRouter(
     prefix="/events",
-    tags=["Events"]
+    tags=["events"]
 )
 
 
@@ -63,3 +63,8 @@ def delete_event(event_id: int, db: Session = Depends(get_db)):
     db.delete(event)
     db.commit()
     return {"detail": "Event deleted"}
+
+@router.get("/", response_model=list[schemas.Event])
+def read_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    events = db.query(models.Event).offset(skip).limit(limit).all()
+    return events

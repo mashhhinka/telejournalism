@@ -1,40 +1,19 @@
+# app/schemas.py
+
 from pydantic import BaseModel, Field
-from typing import Optional, List
 from datetime import datetime
+from typing import Optional
 
-
-# ---------- Correspondent ----------
-
-class CorrespondentBase(BaseModel):
-    name: str
-    email: str
-    country: Optional[str] = None
-    bio: Optional[str] = None
-
-
-class CorrespondentCreate(CorrespondentBase):
-    pass
-
-
-class Correspondent(CorrespondentBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
-
-# ---------- Event ----------
+# -----------------------------
+# Event Schemas
+# -----------------------------
 
 class EventBase(BaseModel):
     title: str
-    location: Optional[str] = None
-    description: Optional[str] = None
-
-
-class EventCreate(BaseModel):
-    title: str
     location: str
     description: str
+
+class EventCreate(EventBase):
     date: datetime = Field(default_factory=datetime.utcnow)
 
 class Event(EventBase):
@@ -42,24 +21,40 @@ class Event(EventBase):
     date: datetime
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
+# -----------------------------
+# Correspondent Schemas
+# -----------------------------
 
-# ---------- Report ----------
+class CorrespondentBase(BaseModel):
+    name: str
+    email: str
 
-class ReportBase(BaseModel):
-    title: str
-    content: Optional[str]
-    correspondent_id: int
-    event_id: int
-
-
-class ReportCreate(ReportBase):
+class CorrespondentCreate(CorrespondentBase):
     pass
 
-
-class Report(ReportBase):
+class Correspondent(CorrespondentBase):
     id: int
 
     class Config:
-        from_attributes = True
+        orm_mode = True
+
+# -----------------------------
+# Report Schemas
+# -----------------------------
+
+class ReportBase(BaseModel):
+    title: str
+    content: str
+    correspondent_id: int
+
+class ReportCreate(ReportBase):
+    date: datetime = Field(default_factory=datetime.utcnow)
+
+class Report(ReportBase):
+    id: int
+    date: datetime
+
+    class Config:
+        orm_mode = True
