@@ -3,18 +3,19 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
-
-# -----------------------------
-# Event Schemas
-# -----------------------------
+from typing import  Dict
 
 class EventBase(BaseModel):
     title: str
     location: str
     description: str
 
-class EventCreate(EventBase):
-    date: datetime = Field(default_factory=datetime.utcnow)
+class EventCreate(BaseModel):
+    title: str
+    location: str
+    description: str
+    date: Optional[datetime] = None
+    data: Optional[Dict] = {}
 
 class Event(EventBase):
     id: int
@@ -22,10 +23,6 @@ class Event(EventBase):
 
     class Config:
         orm_mode = True
-
-# -----------------------------
-# Correspondent Schemas
-# -----------------------------
 
 class CorrespondentBase(BaseModel):
     name: str
@@ -40,9 +37,6 @@ class Correspondent(CorrespondentBase):
     class Config:
         orm_mode = True
 
-# -----------------------------
-# Report Schemas
-# -----------------------------
 
 class ReportBase(BaseModel):
     title: str

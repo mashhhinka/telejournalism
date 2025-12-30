@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
-
+from sqlalchemy.dialects.postgresql import JSONB
 from app.database import Base
 
 
@@ -24,8 +24,8 @@ class Event(Base):
     title = Column(String, nullable=False)
     location = Column(String, nullable=False)
     description = Column(String, nullable=False)
-    date = Column(DateTime, default=datetime.utcnow)
-
+    date = Column(DateTime, default=datetime.utcnow, nullable=False)
+    data = Column(JSONB, default={})
     reports = relationship("Report", back_populates="event")
 
 

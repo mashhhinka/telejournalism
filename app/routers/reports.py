@@ -26,3 +26,7 @@ def create_report(report: schemas.ReportCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=list[schemas.Report])
 def list_reports(db: Session = Depends(get_db)):
     return db.query(models.Report).all()
+
+@router.get("/reports/", response_model=list[schemas.Report])
+def get_reports_with_event(db: Session = Depends(get_db)):
+    return db.query(models.Report).join(models.Event).all()
