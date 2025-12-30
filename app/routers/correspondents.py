@@ -1,20 +1,24 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from .. import crud, schemas, database
 
-router = APIRouter(prefix="/correspondents", tags=["Correspondents"])
+from app import models, schemas
+from app.database import get_db
 
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+router = APIRouter()
+
 
 @router.post("/", response_model=schemas.Correspondent)
-def create_correspondent_endpoint(correspondent: schemas.CorrespondentCreate, db: Session = Depends(get_db)):
-    return crud.create_correspondent(db, correspondent)
+def create_correspondent(
+    correspondent: schemas.CorrespondentCreate,
+    db: Session = Depends(get_db)
+):
+    db_obj = models.Correspondent(**correspondent.dict())
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
+
 
 @router.get("/", response_model=list[schemas.Correspondent])
-def read_correspondents(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return crud.get_correspondents(db, skip=skip, limit=limit)
+def list_correspondents(db: Session = Depends(get_db)):
+    return db.query(models.Correspondent).all()

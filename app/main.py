@@ -1,8 +1,7 @@
 from fastapi import FastAPI
-from app.routers import correspondents
-from app.database import engine, Base
-
-Base.metadata.create_all(bind=engine)
+from app.routers import correspondents, events
 
 app = FastAPI()
-app.include_router(correspondents.router)
+
+app.include_router(correspondents.router, prefix="/correspondents", tags=["Correspondents"])
+app.include_router(events.router, prefix="/events", tags=["Events"])

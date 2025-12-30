@@ -8,14 +8,10 @@ class Correspondent(Base):
     __tablename__ = "correspondents"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    email = Column(String, unique=True, index=True)
-    phone_number = Column(String, nullable=True)
-
-    # Relationships
-    events = relationship("Event", back_populates="correspondent")
-    reports = relationship("Report", back_populates="correspondent")
-
+    name = Column(String(100), nullable=False)
+    email = Column(String(120), unique=True, nullable=False)
+    country = Column(String(100))
+    bio = Column(Text)
 
 class Event(Base):
     __tablename__ = "events"

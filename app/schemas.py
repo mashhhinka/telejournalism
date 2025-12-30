@@ -1,9 +1,28 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
+
+# Correspondent Schemas
+class CorrespondentBase(BaseModel):
+    name: str
+    email: str
+    phone_number: Optional[str] = None
+    country: Optional[str] = None
+    bio: Optional[str] = None
+
+class CorrespondentCreate(CorrespondentBase):
+    pass
+
+class Correspondent(CorrespondentBase):
+    id: int
+
+    class Config:
+        from_attributes = True  
+        
 
 class EventBase(BaseModel):
     title: str
-    date: datetime | None = None
+    date: Optional[datetime] = None
     correspondent_id: int
 
 class EventCreate(EventBase):
@@ -13,7 +32,7 @@ class Event(EventBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ReportBase(BaseModel):
@@ -29,4 +48,4 @@ class Report(ReportBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
