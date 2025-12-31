@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
 from typing import  Dict
+from pydantic import ConfigDict
 
 class EventBase(BaseModel):
     title: str
@@ -23,6 +24,9 @@ class Event(EventBase):
 
     class Config:
         orm_mode = True
+
+class EventOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
 
 class CorrespondentBase(BaseModel):
     name: str

@@ -105,7 +105,6 @@ def sorted_events(order: str = "asc", db: Session = Depends(get_db)):
     else:
         query = query.order_by(models.Event.date.desc())
     return query.all()
-u8999i8
 
 @router.get("/events/search/")
 def search_events(query: str = Query(...), db: Session = Depends(get_db)):
