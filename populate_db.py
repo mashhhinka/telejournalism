@@ -1,18 +1,18 @@
 import requests
-from datetime import datetime, timedelta
 
-URL = "http://127.0.0.1:8080/events/events/"
+BASE_URL = "http://127.0.0.1:8000"  # make sure your FastAPI server is running
+NUM_EVENTS = 50  # how many events to create
 
-# Example: generate 50 events
-for i in range(1, 51):
-    data = {
+for i in range(1, NUM_EVENTS + 1):
+    event_data = {
         "title": f"Event {i}",
-        "location": f"City {i%10}",  # repeat cities
-        "description": f"This is the description for Event {i}",
-        "date": (datetime.utcnow() + timedelta(days=i)).isoformat()
+        "location": f"City {i % 10}",  # cycles through 10 cities
+        "description": f"This is the description for event {i}"
     }
-    response = requests.post(URL, json=data)
-    if response.status_code == 200:
-        print(f"Created: {response.json()['title']}")
+
+    response = requests.post(f"{BASE_URL}/events/", json=event_data)
+    
+    if response.status_code == 200 or response.status_code == 201:
+        print(f"Created event {i}")
     else:
-        print(f"Error {response.status_code}: {response.text}")
+        print(f"Failed to create event {i}: {response.text}")
