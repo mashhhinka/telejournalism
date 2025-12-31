@@ -21,13 +21,14 @@ class Event(Base):
     __tablename__ = "events"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
+    title = Column(String, nullable=False, index=True)
     location = Column(String, nullable=False)
     description = Column(String, nullable=False)
     date = Column(DateTime, default=datetime.utcnow, nullable=False)
     data = Column(JSONB, default={})
     reports = relationship("Report", back_populates="event")
-
+    category = Column(String, nullable=True)
+    extra_data = Column(JSONB, default={}) 
 
 class Report(Base):
     __tablename__ = "reports"
